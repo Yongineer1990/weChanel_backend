@@ -4,7 +4,7 @@ from products.models import Look, Product
 
 class Theme(models.Model):
     name = models.CharField(max_length=50, null=True)
-    product = models.ManyToManyField(Product, through='Theme_Product', related_name='product')
+    product = models.ManyToManyField(Product, through='Theme_Product', related_name='products')
 
     class Meta:
         db_table = 'themes'
@@ -18,7 +18,7 @@ class Theme_Product(models.Model):
 
 class Shape(models.Model):
     name = models.CharField(max_length=50, null=True)
-    product = models.ManyToManyField(Product, through='Shape_Product', related_name='product')
+    product = models.ManyToManyField(Product, through='Shape_Product', related_name='products')
 
     class Meta:
         db_table = 'shape'
@@ -32,7 +32,7 @@ class Shape_Product(models.Model):
 
 class Texture(models.Model):
     name = models.CharField(max_length=50, null=True)
-    product = models.ManyToManyField(Product, through='Texture_Product', related_name='product')
+    product = models.ManyToManyField(Product, through='Texture_Product', related_name='products')
 
     class Meta:
         db_table = 'texture'
@@ -60,7 +60,7 @@ class Color_Product(models.Model):
 
 class Material(models.Model):
     name = models.CharField(max_length=50, null=True)
-    product = models.ManyToManyField(Product, through='Material_Product', related_name='product')
+    product = models.ManyToManyField(Product, through='Material_Product', related_name='products')
 
     class Meta:
         db_table = 'material'
