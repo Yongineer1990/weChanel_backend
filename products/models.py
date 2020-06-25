@@ -34,7 +34,7 @@ class Product(models.Model):
 class Look(models.Model):
     name = models.CharField(max_length=50, null=True)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product, through='Product_look', related_name='product')
+    product = models.ManyToManyField(Product, through='Product_look', related_name='products')
 
     class Meta:
         db_table = 'looks'
