@@ -90,14 +90,14 @@ class SizeProduct(models.Model):
         db_table = 'size_products'
 
 class ProductImage(models.Model):
-    url     = models.URLField(max_length=200, null=True)
+    url     = models.URLField(max_length=500, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'product_images'
 
 class LookImage(models.Model):
-    url     = models.URLField(max_length=200, null=True)
+    url     = models.URLField(max_length=500, null=True)
     look    = models.ForeignKey(Look, on_delete=models.CASCADE)
 
     class Meta:
