@@ -16,7 +16,7 @@ class Collection(models.Model):
 class Product(models.Model):
     product_code    = models.CharField(max_length=100, null=True)
     name            = models.CharField(max_length=50, null=True)
-    price           = models.DecimalField(max_digits=10, decimal_places=6, null=True)
+    price           = models.DecimalField(max_digits=14, decimal_places=4, null=True)
     collection      = models.ForeignKey(Collection, on_delete=models.SET_NULL, null=True)
 
     class Meta:
