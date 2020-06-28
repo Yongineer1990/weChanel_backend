@@ -78,6 +78,7 @@ class MaterialProduct(models.Model):
 class Size(models.Model):
     size_main   = models.CharField(max_length=50, null=True)
     size_sub    = models.CharField(max_length=50, null=True)
+    product     = models.ManyToManyField(Product, through='SizeProduct', related_name='size')
 
     class Meta:
         db_table = 'sizes'
