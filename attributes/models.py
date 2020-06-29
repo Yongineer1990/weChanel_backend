@@ -60,7 +60,6 @@ class ColorProduct(models.Model):
     class Meta:
         db_table = 'color_products'
 
-
 class Material(models.Model):
     name    = models.CharField(max_length=50, null=True)
     product = models.ManyToManyField(Product, through='MaterialProduct', related_name='meterial')

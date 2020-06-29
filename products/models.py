@@ -12,7 +12,6 @@ class Collection(models.Model):
     class Meta:
         db_table = 'collections'
 
-
 class Product(models.Model):
     product_code    = models.CharField(max_length=100, null=True)
     name            = models.CharField(max_length=50, null=True)
