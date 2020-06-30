@@ -8,27 +8,31 @@ class BagView(View):
     def get(self, request):
 
         total_bag_info = []
-        bag_list = Product.objects.filter(name__contains="CHANEL 19").prefetch_related('texture', 'productimage_set')
+        bag_list = Product.objects.filter(
+                                            name__contains="CHANEL 19"
+                                         ).prefetch_related(
+                                                            'texture',
+                                                            'productimage_set'
+                                                           ).exclude(id__lt=400)
 
         for bag in bag_list:
             bag_code            = bag.product_code
             bag_img             = bag.productimage_set.all()
-            if bag_img.exists():
-                bag_img         = bag_img[0].url
-                bag_name        = bag.name
-                bag_price       = bag.price
-                each_bag        = Product.objects.get(product_code=bag_code)
-                textures        = each_bag.texture.all()
-                texture_list    = []
-                bag_info = {}
-                for texture in textures:
-                    texture = texture.name
-                    texture_list.append(texture)
-                bag_info['bag_img']     = bag_img
-                bag_info['bag_name']    = bag_name
-                bag_info['bag_price']   = bag_price
-                bag_info['texture']     = texture_list
-                total_bag_info.append(bag_info)
+            bag_img         = bag_img[0].url
+            bag_name        = bag.name
+            bag_price       = bag.price
+            each_bag        = Product.objects.get(product_code=bag_code)
+            textures        = each_bag.texture.all()
+            texture_list    = []
+            bag_info = {}
+            for texture in textures:
+                texture = texture.name
+                texture_list.append(texture)
+            bag_info['bag_img']     = bag_img
+            bag_info['bag_name']    = bag_name
+            bag_info['bag_price']   = bag_price
+            bag_info['texture']     = texture_list
+            total_bag_info.append(bag_info)
 
         return JsonResponse({'bag_info':total_bag_info}, status=200)
 
