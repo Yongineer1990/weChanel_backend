@@ -42,8 +42,8 @@ class BagView(View):
 
 class DetailView(View):
     def get(self, request, bag_code):
-        print('입력받은 코드  ', bag_code)
         detail_bag_info = {}
+        option_num      = 0
         product_list = Product.objects.prefetch_related(
                                                         'productimage_set',
                                                         'sizeproduct_set',
@@ -83,6 +83,7 @@ class DetailView(View):
             if leather_bags.exists():
                 leather_bag_images = [ leather_bag.productimage_set.all()[0].url for leather_bag in leather_bags ]
                 leather_bag_codes  =  [leather.product_code.replace(' ','') for leather in leather_bags ]
+                option_num        += len(leather_bag_codes)
 
             tweed_bags      = Product.objects.filter(
                                                         meterial__name='트위드 & 패브릭'
@@ -90,7 +91,7 @@ class DetailView(View):
             if tweed_bags.exists():
                 tweed_bag_images = [ tweed_bag.productimage_set.all()[0].url for tweed_bag in tweed_bags ]
                 tweed_bag_codes  = [ tweed.product_code.replace(' ','') for tweed in tweed_bags ]
-
+                option_num      += len(tweed_bag_codes)
 
             other_bags      = Product.objects.filter(
                                                         meterial__name='기타 재질'
@@ -98,6 +99,7 @@ class DetailView(View):
             if other_bags.exists():
                 other_bag_images = [ other_bag.productimage_set.all()[0].url for other_bag in other_bags ]
                 other_bag_codes  = [ other.product_code.replace(' ','') for other in other_bags ]
+                option_num      += len(other_bag_codes)
 
             detail_bag_info['bag_image_all']        = bag_image_all
             detail_bag_info['bag_texture']          = bag_texture
@@ -107,6 +109,7 @@ class DetailView(View):
             detail_bag_info['bag_code']             = bag_code
             detail_bag_info['bag_price']            = bag_price
             detail_bag_info['bag_name']             = bag_name
+            detail_bag_info['opton_num']            = option_num
             detail_bag_info['leather_bag_images']   = leather_bag_images
             detail_bag_info['leather_bag_codes']    = leather_bag_codes
             detail_bag_info['tweed_bag_images']     = tweed_bag_images
