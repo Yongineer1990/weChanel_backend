@@ -35,7 +35,8 @@ class BagView(View):
 
 
 class DetailView(View):
-    def get(self, request, bag_num):
+    def get(self, request, bag_code):
+        print(bag_code)
         detail_bag_info = {}
         product_list = Product.objects.prefetch_related(
                                                         'productimage_set',
