@@ -26,7 +26,7 @@ SECRET_KEY = my_settings.SECRET['secret']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*","10.58.2.23","10.58.2.23:8000"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
