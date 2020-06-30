@@ -7,15 +7,22 @@ from django.http import JsonResponse
 class AllLook(View):
     def get(self, request):
         look_info = []
-        images  = LookImage.objects.select_related('look').all()
-        looks    = Look.objects.all()
-        for look in looks:
-            image = images.filter(look = look.id)[0]
-            look_info.append({
-                'id'    : look.id,
-                'name'  : look.name,
-                'image' : image.url
+        look_images  = LookImage.objects.select_related('look').all()
+        for qs in look_images:
+            looks = []
+            look_id = qs.look_id
+
+            urls_list = []
+            for urls in look_images.filter(look=qs.look.id):
+                urls_list.append(urls.url.strip())
+
+            image = urls_list[0]
+            looks.append({
+                'id'    : look_id,
+                'image' : image
             })
+            print(looks)
+            look_info.append(looks[0])
 
         return JsonResponse({"look" : look_info}, status=200)
 
