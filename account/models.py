@@ -1,4 +1,5 @@
 from django.db import models
+from products.models import Product, Look 
 
 class Account(models.Model):
     email      = models.EmailField(max_length=100, unique=True)
@@ -8,3 +9,17 @@ class Account(models.Model):
 
     class Meta:
         db_table = 'accounts'
+
+class Product_wishlist(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'product_wishlists'
+
+class Look_wishlist(models.Model):
+    look    = models.ForeignKey(Look, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'look_wishlists'
