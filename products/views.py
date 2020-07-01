@@ -1,16 +1,22 @@
-from .models import Look
-from attributes.models import LookImage, Color, Texture
 import json
+
 from django.views import View
 from django.http import JsonResponse
+
+from .models import Look
+from attributes.models import (
+    LookImage,
+    Color,
+    Texture
+)
 
 class AllLook(View):
     def get(self, request):
         look_info = []
-        images  = LookImage.objects.select_related('look').all()
-        looks    = Look.objects.all()
+        looks     = Look.objects.all()
+
         for look in looks:
-            image = images.filter(look = look.id)[0]
+            image = look.lookimage_set.first()
             look_info.append({
                 'id'    : look.id,
                 'name'  : look.name,
@@ -22,55 +28,48 @@ class AllLook(View):
 class LookDetail(View):
     def get(self, request, look_num):
         try:
-            look_detail = []
-            looks       = Look.objects.all().prefetch_related('product')
-            look        = looks.get(id=look_num)
-            products    = look.product
+            if Look.objects.filter(id=look_num).exists():
+                looks       = Look.objects.get(id=look_num)
+                products    = looks.product.all()
 
-            for product in products.all():
-                print(product.product_code)
-                product_info    = []
-                color_info      = []
-                texture_info    = []
+                product_info = []
+                for product in products:
 
-                colors = product.color.all()
-                for color in colors:
-                    color_info.append({
+                    colors = Color.objects.filter(product=product.id)
+                    color_info = [{
                         'id'    : color.id,
                         'name'  : color.name
-                    })
+                    } for color in colors]
 
-                textures = product.texture.all()
-                for texture in textures:
-                    texture_info.append({
+                    textures = Texture.objects.filter(product=product.id)
+                    texture_info = [{
                         'id'    : texture.id,
                         'name'  : texture.name
+                    } for texture in textures]
+
+                    product_info.append({
+                        'product_id'    : product.id,
+                        'product_name'  : product.name,
+                        'product_code'  : product.product_code,
+                        'product_price' : product.price,
+                        'color'         : color_info,
+                        'texture'       : texture_info
                     })
 
-                product_info.append({
-                    'product_id'    : product.id,
-                    'Product_code'  : product.product_code,
-                    'Name'          : product.name,
-                    'price'         : product.price,
-                    'color'         : color_info,
-                    'texture'       : texture_info
+                look_images = LookImage.objects.filter(look_id=look_num)
+                look_image  = [image.url for image in look_images]
 
-                })
-                look_detail.append(product_info)
+                return JsonResponse({
+                    'img'        : look_image,
+                    'products'   : product_info,
+                }, status=200)
 
-            look_images = LookImage.objects.filter(look_id=look_num)
-            look_image  = []
-            for image in look_images:
-                look_image.append(image.url)
-
-            return JsonResponse({
-                'img'       : look_image,
-                'products'   : look_detail,
-            }, status=200)
+            else:
+                return JsonResponse(
+                    {'Message': f'잘못된 접근 - look_num : {look_num}'},
+                    status=400
+                )
 
         except KeyError as e:
-            return JsonResponse({'Message': f"KEY ERROR! : {e}"}, status=400)
-
-        except Look.DoesNotExist:
-            return JsonResponse({'Message': f'잘못된 접근 - look_num : {look_num}'}, status=400)
+            return JsonResponse({'Message': f"KEY ERROR : {e}"}, status=400)
 
