@@ -60,7 +60,6 @@ class ColorProduct(models.Model):
     class Meta:
         db_table = 'color_products'
 
-
 class Material(models.Model):
     name    = models.CharField(max_length=50, null=True)
     product = models.ManyToManyField(Product, through='MaterialProduct', related_name='material')
@@ -78,6 +77,7 @@ class MaterialProduct(models.Model):
 class Size(models.Model):
     size_main   = models.CharField(max_length=50, null=True)
     size_sub    = models.CharField(max_length=50, null=True)
+    product     = models.ManyToManyField(Product, through='SizeProduct', related_name='size')
 
     class Meta:
         db_table = 'sizes'
@@ -90,14 +90,14 @@ class SizeProduct(models.Model):
         db_table = 'size_products'
 
 class ProductImage(models.Model):
-    url     = models.CharField(max_length=2000, null=True)
+    url     = models.URLField(max_length=500, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'product_images'
 
 class LookImage(models.Model):
-    url     = models.CharField(max_length=2000, null=True)
+    url     = models.URLField(max_length=500, null=True)
     look    = models.ForeignKey(Look, on_delete=models.CASCADE)
 
     class Meta:
