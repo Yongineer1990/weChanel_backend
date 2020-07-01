@@ -17,7 +17,7 @@ class AllLook(View):
                 'image' : image.url
             })
 
-        return JsonResponse({"look" : look_info}, status=200)
+        return JsonResponse({'look' : look_info}, status=200)
 
 class LookDetail(View):
     def post(self, request, look_num):
@@ -35,13 +35,20 @@ class LookDetail(View):
 
                 colors = product.color.all()
                 for color in colors:
-                    color_info.append(color.name)
+                    color_info.append({
+                        'id'    : color.id,
+                        'name'  : color.name
+                    })
 
                 textures = product.texture.all()
                 for texture in textures:
-                    texture_info.append(texture.name)
+                    texture_info.append({
+                        'id'    : texture.id,
+                        'name'  : texture.name
+                    })
 
                 product_info.append({
+                    'product_id'    : product.id,
                     'Product_code'  : product.product_code,
                     'Name'          : product.name,
                     'price'         : product.price,
