@@ -47,7 +47,7 @@ class DetailView(View):
         product_list = Product.objects.prefetch_related(
                                                         'productimage_set',
                                                         'sizeproduct_set',
-                                                        'meterial',
+                                                        'material',
                                                         'texture',
                                                         'color'
                                                         ).filter(
@@ -78,7 +78,7 @@ class DetailView(View):
             other_bag_codes     = []
 
             leather_bags        =  Product.objects.filter(
-                                                            meterial__name='Leather'
+                                                            material__name='Leather'
                                                          ).filter(name=bag.name)
             if leather_bags.exists():
                 leather_bag_images = [ leather_bag.productimage_set.all()[0].url for leather_bag in leather_bags ]
@@ -86,7 +86,7 @@ class DetailView(View):
                 option_num        += len(leather_bag_codes)
 
             tweed_bags      = Product.objects.filter(
-                                                        meterial__name='트위드 & 패브릭'
+                                                        material__name='트위드 & 패브릭'
                                                     ).filter(name=bag.name)
             if tweed_bags.exists():
                 tweed_bag_images = [ tweed_bag.productimage_set.all()[0].url for tweed_bag in tweed_bags ]
@@ -94,7 +94,7 @@ class DetailView(View):
                 option_num      += len(tweed_bag_codes)
 
             other_bags      = Product.objects.filter(
-                                                        meterial__name='기타 재질'
+                                                      material__name='기타 재질'
                                                     ).filter(name=bag.name)
             if other_bags.exists():
                 other_bag_images = [ other_bag.productimage_set.all()[0].url for other_bag in other_bags ]
@@ -122,4 +122,23 @@ class DetailView(View):
             return JsonResponse({'NO MORE':'BAGS'}, status=405)
         except AssertionError:
             return JsonResponse({'NEGATIVE':'LIST_INDEXIMG'}, status=406)
+
+
+
+
+
+
+#class DetailView(View):
+#    def get(self, request):
+#        #data = json.loads(request.body)
+#
+#        filters = {}
+#
+#       for key, value in param_dict.items():
+#           if value:
+#               filters[key] = value
+#       print(filters)
+#       filtered_products = Product.objects.filter(**filters)
+
+
 
