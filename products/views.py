@@ -20,7 +20,7 @@ class AllLook(View):
         return JsonResponse({'look' : look_info}, status=200)
 
 class LookDetail(View):
-    def post(self, request, look_num):
+    def get(self, request, look_num):
         try:
             look_detail = []
             looks       = Look.objects.all().prefetch_related('product')
