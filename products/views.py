@@ -18,7 +18,6 @@ class BagView(View):
         filters['material__in']      = material_option
 
         new_filters = {}
-        empty_query_string = ''
         for key, value in filters.items():
             if value:
                 new_filters[key] = value
