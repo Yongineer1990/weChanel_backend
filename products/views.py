@@ -28,7 +28,13 @@ class LookWishlist(View):
         look            = looks.get(id=look_id)
 
         if user_lookwish.filter(look_id=look).exists():
-            return JsonResponse({"message" : "이미 있는 아이템"}, status=200)
+            Look_wishlist.objects.get(
+                account_id = user,
+                look_id = look.id
+            ).delete()
+
+            return JsonResponse({"message" : f'delete look:{look_id}'}, status=200)
+
         else:
             Look_wishlist.objects.create(
                 account_id  = user,
@@ -46,7 +52,13 @@ class ProductWishlist(View):
         product         = products.get(id=product_id)
 
         if user_prodwish.filter(product_id=product).exists():
-            return JsonResponse({"message" : "이미 있는 아이템"}, status=200)
+            Product_wishlist.objects.get(
+                account_id = user,
+                product_id = product.id
+            ).delete()
+
+            return JsonResponse({"message" : "delete product:{product_id}"}, status=200)
+
         else:
             Product_wishlist.objects.create(
                 account_id = user,
