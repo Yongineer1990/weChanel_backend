@@ -96,7 +96,7 @@ class Wishlist(View):
 
             prod_wishlist.append({
                 'menu'              : menu,
-                'product_id'        : productwish.product.id
+                'product_id'        : productwish.product.id,
                 'product_name'      : productwish.product.name,
                 'product_price'     : productwish.product.price,
                 'product_texture'   : product_texture,
