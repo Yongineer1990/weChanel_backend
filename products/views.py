@@ -1,7 +1,12 @@
+import json
 from django.http import JsonResponse
 from django.views import View
-from .models import Product
-import json
+from .models import Look, Product
+from attributes.models import (
+    LookImage,
+    Color,
+    Texture
+)
 
 class BagView(View):
     def get(self, request):
@@ -21,6 +26,7 @@ class BagView(View):
         for key, value in filters.items():
             if value:
                 new_filters[key] = value
+
         bag_list = Product.objects.filter(
             name__contains="CHANEL 19"
         ).prefetch_related(
@@ -34,12 +40,12 @@ class BagView(View):
                 'bag_img'           : bag.productimage_set.all()[0].url,
                 'bag_name'          : bag.name,
                 'bag_price'         : bag.price,
-                'texture'           : [ texture.name for texture in bag.texture.all() ]
+                'texture'           : [texture.name for texture in bag.texture.all()]
             } for bag in bag_list
         ]
         return JsonResponse({'bag_info':total_bag_info}, status=200)
 
-class DetailView(View):
+class BagDetail(View):
     def get(self, request, query_bag_code):
         product_list = Product.objects.prefetch_related(
             'productimage_set',
@@ -65,36 +71,90 @@ class DetailView(View):
                 'bag_name'         : req_bag.name,
                 'option_num'       : product_list.filter(name=req_bag.name).count(),
                 'leather_bag_info' : [
-                                        {
-                                            'code' : product.product_code.replace(' ',''),
-                                            'image': product.productimage_set.all()[0].url
-                                        }
-                                        for product in product_list.filter(
-                                            name=req_bag.name,
-                                            material__name='Leather'
-                                        )
-                                     ],
+                    {
+                        'code' : product.product_code.replace(' ',''),
+                        'image': product.productimage_set.all()[0].url
+                    }
+                    for product in product_list.filter(
+                        name=req_bag.name,
+                        material__name='Leather'
+                        )
+                ],
                 'tweed_bag_info'   : [
-                                        {
-                                            'code'  : product.product_code.replace(' ',''),
-                                            'image' : product.productimage_set.all()[0].url
-                                        }
-                                        for product in product_list.filter(
-                                            name=req_bag.name,
-                                            material__name='트위드 & 패브릭'
-                                        )
-                                     ],
+                    {
+                        'code'  : product.product_code.replace(' ',''),
+                        'image' : product.productimage_set.all()[0].url
+                    }
+                    for product in product_list.filter(
+                        name=req_bag.name,
+                        material__name='트위드 & 패브릭'
+                        )
+                ],
                 'other_bag_info '  : [
-                                        {
-                                            'code' : product.product_code.replace(' ',''),
-                                            'image': product.productimage_set.all()[0].url
-                                        }
-                                        for product in product_list.filter(
-                                            name=req_bag.name,
-                                            material__name='기타 재질'
-                                        )
-                                     ]
+                    {
+                        'code' : product.product_code.replace(' ',''),
+                        'image': product.productimage_set.all()[0].url
+                    }
+                    for product in product_list.filter(
+                        name=req_bag.name,
+                        material__name='기타 재질'
+                        )
+                ]
             }
             return JsonResponse({'detail_bag_info':detail_bag_info}, status=200)
         except ValueError:
             return JsonResponse({'WRONG':'CODE'}, status=405)
+
+class AllLook(View):
+    def get(self, request):
+        look_info = []
+        looks     = Look.objects.all()
+
+        for look in looks:
+            image = look.lookimage_set.first()
+            look_info.append({
+                'id'    : look.id,
+                'name'  : look.name,
+                'image' : image.url
+            })
+
+        return JsonResponse({'look' : look_info}, status=200)
+
+class LookDetail(View):
+    def get(self, request, look_num):
+        try:
+            if Look.objects.filter(id=look_num).exists():
+                looks       = Look.objects.prefetch_related('product').get(id=look_num)
+                products    = looks.product.all()
+
+                product_info = [{
+                    'product_id'    : product.id,
+                    'product_name'  : product.name,
+                    'product_code'  : product.product_code,
+                    'product_price' : product.price,
+                    'color'         : [{
+                        'color_id'      : color.id,
+                        'color_name'    : color.name
+                    } for color in product.color.all()],
+                    'texture'       : [{
+                        'texture_id'    : texture.id,
+                        'texture_name'  : texture.name
+                    } for texture in product.texture.all()]
+                } for product in products]
+
+                look_images = LookImage.objects.filter(look_id=look_num)
+                look_image  = [image.url for image in look_images]
+
+                return JsonResponse({
+                    'img'        : look_image,
+                    'products'   : product_info,
+                }, status=200)
+
+            else:
+                return JsonResponse(
+                    {'Message': f'잘못된 접근 - look_num : {look_num}'},
+                    status=400
+                )
+
+        except KeyError as e:
+            return JsonResponse({'Message': f"KEY ERROR : {e}"}, status=400)
