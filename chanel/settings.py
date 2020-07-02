@@ -26,7 +26,9 @@ SECRET_KEY = my_settings.SECRET['secret']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*","10.58.2.23","10.58.2.23:8000"]
+ALGORITHM = my_settings.ALGORITHM['algorithm']
+
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -81,13 +83,6 @@ WSGI_APPLICATION = 'chanel.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = my_settings.DATABASES
-
-ATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation

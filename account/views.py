@@ -33,11 +33,9 @@ class SignUpView(View):
 class SignInView(View):
     def post(self, request):
         user_data = json.loads(request.body)
-
         try:
             if Account.objects.filter(email = user_data['email']).exists():
                 user = Account.objects.get(email = user_data['email'])
-
                 if bcrypt.checkpw(user_data['password'].encode('utf-8'), user.password.encode('utf-8')):
                     token = jwt.encode({'email' : user_data['email']}, SECRET_KEY, algorithm = "HS256")
                     token = token.decode('utf-8')
