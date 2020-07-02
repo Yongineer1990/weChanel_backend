@@ -46,29 +46,6 @@ class LookDetail(View):
                         'texture_name'  : texture.name
                     } for texture in product.texture.all()]
                 } for product in products]
-                # product_info = []
-                # for product in products:
-
-                    # colors = Color.objects.filter(product=product.id)
-                    # color_info = [{
-                        # 'id'    : color.id,
-                        # 'name'  : color.name
-                    # } for color in colors]
-
-                    # textures = Texture.objects.filter(product=product.id)
-                    # texture_info = [{
-                        # 'id'    : texture.id,
-                        # 'name'  : texture.name
-                    # } for texture in textures]
-
-                    # product_info.append({
-                        # 'product_id'    : product.id,
-                        # 'product_name'  : product.name,
-                        # 'product_code'  : product.product_code,
-                        # 'product_price' : product.price,
-                        # 'color'         : color_info,
-                        # 'texture'       : texture_info
-                    # })
 
                 look_images = LookImage.objects.filter(look_id=look_num)
                 look_image  = [image.url for image in look_images]
