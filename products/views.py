@@ -3,10 +3,11 @@ import json
 from django.http import JsonResponse
 from django.views import View
 
-from account.decorator import login_decorator
+from utils.decorator import login_decorator
 
 from .models import (
     Look,
+    Category,
     Product
 )
 from attributes.models import (
@@ -16,9 +17,11 @@ from attributes.models import (
 )
 from account.models import (
     Account,
-    Look_wishlist,
-    Product_wishlist
+    LookWishlist,
+    ProductWishlist
 )
+
+LOOKMENU_ID = 1
 
 class BagView(View):
     def get(self, request):
@@ -27,7 +30,7 @@ class BagView(View):
         shape_option      = request.GET.getlist('shape__in')
         material_option   = request.GET.getlist('material__in')
 
-        filters                      = {}
+        filters = {}
         if collection_option:
             filters['collection_id__in'] = collection_option
         if theme_option:
@@ -168,6 +171,21 @@ class LookDetail(View):
 
         except KeyError as e:
             return JsonResponse({'Message': f"KEY ERROR : {e}"}, status=400)
+
+class LookCategoryView(View):
+    def get(self, request, category_id):
+        if Category.objects.get(id=category_id).menu.id == LOOKMENU_ID:
+            categories = Category.objects.prefetch_related('product').get(id=category_id).product.all()
+
+            look_info = [{
+                'id' : category.look.first().id,
+                'name' : category.look.first().name,
+                'image' : category.look.first().lookimage_set.first().url
+            } for category in categories]
+
+            return JsonResponse({"look" : look_info}, status=200)
+
+        return JsonResponse({'Message': f'INVALID_CATEGORY : {category_id}'}, status=400)
 
 class LookWishlist(View):
     @login_decorator
