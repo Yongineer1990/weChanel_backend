@@ -8,5 +8,5 @@ from .views import (
 urlpatterns = [
     path('/cruise-2019-20', AllLook.as_view()),
     path('/cruise-2019-20/<int:look_num>', LookDetail.as_view()),
-    path('cruise-2019-20/category/<int:category_id>',LookCategoryView.as_view())
+    path('/cruise-2019-20/category/<int:category_id>',LookCategoryView.as_view())
 ]
