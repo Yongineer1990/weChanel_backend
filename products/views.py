@@ -1,7 +1,12 @@
 import json
+
 from django.http import JsonResponse
 from django.views import View
-from .models import Look, Product
+
+from .models import (
+    Look,
+    Product
+)
 from attributes.models import (
     LookImage,
     Color,
@@ -10,7 +15,6 @@ from attributes.models import (
 
 class BagView(View):
     def get(self, request):
-        total_bag_info    = []
         collection_option = request.GET.getlist('collection_id__in')
         theme_option      = request.GET.getlist('theme__in')
         shape_option      = request.GET.getlist('shape__in')
@@ -102,7 +106,7 @@ class BagDetail(View):
             }
             return JsonResponse({'detail_bag_info':detail_bag_info}, status=200)
         except ValueError:
-            return JsonResponse({'WRONG':'CODE'}, status=409)
+            return JsonResponse({'Message':'WRONG_CODE'}, status=409)
 
 class AllLook(View):
     def get(self, request):
