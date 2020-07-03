@@ -6,11 +6,12 @@ from django.views import View
 from django.http import JsonResponse
 
 from chanel.settings import SECRET_KEY
-from account.decorator import login_decorator
+from account.utils import login_decorator
+
 from .models import (
     Account,
-    Look_wishlist,
-    Product_wishlist
+    LookWishlist,
+    ProductWishlist
 )
 from products.models import (
     Look,
@@ -50,11 +51,9 @@ class SignUpView(View):
 class SignInView(View):
     def post(self, request):
         user_data = json.loads(request.body)
-
         try:
             if Account.objects.filter(email = user_data['email']).exists():
                 user = Account.objects.get(email = user_data['email'])
-
                 if bcrypt.checkpw(user_data['password'].encode('utf-8'), user.password.encode('utf-8')):
                     token = jwt.encode({'email' : user_data['email']}, SECRET_KEY, algorithm = "HS256")
                     token = token.decode('utf-8')
@@ -74,8 +73,8 @@ class Wishlist(View):
         prod_wishlist = []
 
         uid             = Account.objects.get(email = request.userinfo.email).id
-        lookwishes      = Look_wishlist.objects.filter(account_id = uid)
-        productwishes   = Product_wishlist.objects.filter(account_id = uid)
+        lookwishes      = LookWishlist.objects.filter(account_id = uid)
+        productwishes   = ProductWishlist.objects.filter(account_id = uid)
 
         for lookwish in lookwishes:
             look_images = [look_img.url for look_img in LookImage.objects.filter(look_id = lookwish.look.id)]
