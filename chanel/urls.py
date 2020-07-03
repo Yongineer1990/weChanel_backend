@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """chanel URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -19,3 +20,14 @@ urlpatterns = [
         path('account', include('account.urls')),
         path('product', include('product.urls')),
         ]
+=======
+from django.urls import (
+    path,
+    include
+)
+
+urlpatterns = [
+    path('products', include('products.urls')),
+]
+
+>>>>>>> c2565b19eb1e4344bc77e6b9f45288bdc5be9fc1

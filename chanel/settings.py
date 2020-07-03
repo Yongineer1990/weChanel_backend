@@ -16,7 +16,6 @@ import my_settings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,8 +25,11 @@ SECRET_KEY = my_settings.SECRET['secret']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALGORITHM = my_settings.ALGORITHM['algorithm']
 
+=======
+>>>>>>> c2565b19eb1e4344bc77e6b9f45288bdc5be9fc1
 ALLOWED_HOSTS = ["*"]
 
 
@@ -84,7 +86,10 @@ WSGI_APPLICATION = 'chanel.wsgi.application'
 
 DATABASES = my_settings.DATABASES
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c2565b19eb1e4344bc77e6b9f45288bdc5be9fc1
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
