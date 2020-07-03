@@ -3,7 +3,10 @@ import json
 from django.views import View
 from django.http import JsonResponse
 
-from .models import Look
+from .models import (
+    Look,
+    Category
+)
 from attributes.models import (
     LookImage,
     Color,
@@ -63,4 +66,27 @@ class LookDetail(View):
 
         except KeyError as e:
             return JsonResponse({'Message': f"KEY ERROR : {e}"}, status=400)
+
+class LookCategoryView(View):
+    def get(self, request, category_id):
+        if Category.objects.get(id=category_id).menu.id == 1:
+            category = Category.objects.prefetch_related('product').get(id=category_id)
+            products = category.product.all()
+
+            look_info = []
+            for product in products:
+                looks = product.look.all()
+                for look in looks:
+                    image = look.lookimage_set.all().first().url
+                    look_info.append({
+                        'id'    : look.id,
+                        'name'  : look.name,
+                        'image' : image
+                    })
+
+            return JsonResponse({"look" : look_info}, status=200)
+        else:
+
+            return JsonResponse({'Message': f'잘못된 접근 - category_id : {category_id}'}, status=400)
+
 
