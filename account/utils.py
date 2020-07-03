@@ -12,7 +12,7 @@ def login_decorator(func):
     def wrapper(self, request, *args, **kwargs):
         token = request.headers.get('Authorization', None)
         
-        if token is not None:
+        if token:
 
             try:
                 payload          = jwt.decode(token, SECRET_KEY, algorithm=ALGORITHM)
@@ -25,7 +25,7 @@ def login_decorator(func):
                 return JsonResponse({'message' : 'INVALID_TOKEN' }, status=400)
 
             except Account.DoesNotExist:
-                return JsonResponse({'message' : 'This User Does Not Exist'}, status=400)
-        else:
-            return JsonResponse({'message' : "You need to log in first"}, status=401)
+                return JsonResponse({'message' : 'ACCOUNT_DOES_NOT_EXIST'}, status=400)
+            
+            return JsonResponse({'message' : 'LOGIN_REQUIRED'}, status=401)
     return wrapper
