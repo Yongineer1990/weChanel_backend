@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 from django.views import View
 
-from utils.decorator import login_decorator
+from account.utils import login_decorator
 
 from .models import (
     Look,
