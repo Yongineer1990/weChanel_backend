@@ -22,6 +22,8 @@ Frontend의 깃허브는 [여기](https://github.com/wecode-bootcamp-korea/9-No.
 - JWT
 - Mysql
 - CORS headers
+- AWS : EC2, RDS
+- Docker
 
 ## Modeling
 ![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/1bfc3a2e-92ae-4fdd-a64b-3e5aea3d1ca9/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200704%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200704T144450Z&X-Amz-Expires=86400&X-Amz-Signature=bb64bc2a2f11dbc8c14b3c8e14e95d7caab6418b3fc2bcdf153a65e5ed132f4f&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
